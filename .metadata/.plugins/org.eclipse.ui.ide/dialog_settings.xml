@@ -109,6 +109,11 @@
 		<item key="WizardProjectsImportPage.STORE_CLOSE_CREATED_PROJECTS_ID" value="false"/>
 		<item key="WizardProjectsImportPage.STORE_HIDE_CONFLICTING_PROJECTS_ID" value="false"/>
 		<list key="WizardProjectsImportPage.STORE_DIRECTORIES">
+			<item value="C:\java\Spring\ex03"/>
+			<item value="C:\java\Spring\ex02_1"/>
+			<item value="C:\java\Spring\ex02"/>
+			<item value="C:\java\Spring\ex01"/>
+			<item value="C:\java\Spring\ex00"/>
 			<item value="C:\java\Spring\SampleTest2"/>
 			<item value="C:\java\Spring\SampleTest"/>
 			<item value="C:\java\Spring\MybatisTest"/>
