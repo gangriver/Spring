@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="shop.park.repository.QnaMapper">
+	
+	<resultMap type="Qna" id="qnaResultMap">
+		<result property="q_no" column="Q_NO"/>
+		<result property="q_title" column="Q_TITLE"/>
+		<result property="q_content" column="Q_CONTENT"/>
+		<result property="u_id" column="U_ID"/>
+		<result property="q_date" column="Q_DATE"/>
+		<result property="q_reply" column="Q_REPLY"/>
+	</resultMap>
+	
+	
+	<!-- 관리자용  -->
+	<select id="adminSelectAllQna" resultMap="qnaResultMap">
+		SELECT * FROM tm_qna ORDER BY q_no DESC
+	</select>
+	
+	<select id="selectAllQna" resultMap="qnaResultMap">
+		SELECT * FROM tm_qna WHERE u_id=#{u_id} ORDER BY q_no DESC
+	</select>
+	
+	<select id="selectByQnaNo" parameterType="long" resultMap="qnaResultMap">
+		SELECT * FROM tm_qna WHERE q_no=#{q_no}
+	</select>
+	
+	<select id="searchByQnaTitle" parameterType="String" resultMap="qnaResultMap">
+		SELECT * FROM tm_qna WHERE q_title LIKE '%'||#{q_title}||'%'
+	</select>
+	
+	<select id="selectByQnaReply" parameterType="String" resultMap="qnaResultMap">
+		SELECT * FROM tm_qna WHERE q_reply=#{q_reply}
+	</select>
+	
+	<insert id="insertQna" parameterType="Qna">
+		INSERT INTO tm_qna VALUES(TM_QNA_SEQ.NEXTVAL, #{q_title}, #{q_content}, #{u_id}, 'n', DEFAULT)
+	</insert>
+	
+	<update id="updateQna" parameterType="Qna">
+		UPDATE tm_qna SET q_title=#{q_title}, q_content=#{q_content}, q_date=DEFAULT WHERE q_no=#{q_no}
+	</update>
+	
+	<delete id="deleteQna" parameterType="long">
+		DELETE tm_qna WHERE q_no=#{q_no}
+	</delete>
+
+
+	<!-- 관리자페이지용 -->
+	<update id="updateQnaReply" parameterType="Qna">
+		UPDATE tm_qna SET q_reply=#{q_reply} WHERE q_no=#{q_no}
+	</update>
+
+	
+	<!-- 웹스퀘어용 -->
+	<insert id="insertQnaWq" parameterType="Map">
+		INSERT INTO tm_qna VALUES(TM_QNA_SEQ.NEXTVAL, #{q_title}, #{q_content}, #{u_id}, 'n', DEFAULT)
+	</insert>
+	
+	
+	<!-- 
+	CREATE FUNCTION get_qna_seq RETURN NUMBER IS
+	BEGIN
+    	RETURN TM_QNA_SEQ.NEXTVAL;
+	END;
+	/
+	 -->
+	<insert id="insertQnaWqBatch" parameterType="Map">
+		<foreach item="param" collection="insert" index="idx" open="INSERT ALL " separator=" " close="SELECT * FROM DUAL">
+			INTO tm_qna(q_no, q_title, q_content, u_id, q_reply, q_date)
+			VALUES
+			(
+				GET_QNA_SEQ,
+				#{param.q_title},
+				#{param.q_content},
+				#{param.u_id},
+				#{param.q_reply},
+				#{param.q_date}
+			)
+		</foreach>
+	</insert>
+	
+	<update id="updateQnaWq" parameterType="Map">
+		UPDATE tm_qna SET 
+			q_no=#{q_no},
+			q_title=#{q_title}, 
+			q_content=#{q_content},
+			u_id=#{u_id},
+			q_reply=#{q_reply}, 
+			q_date=#{q_date} 
+		WHERE q_no=#{q_no}
+	</update>
+	
+	<update id="updateQnaWqBatch" parameterType="Map">
+		<foreach item="param" collection="update" open="" separator=";" close="">
+			UPDATE tm_qna SET
+				q_no=#{param.q_no},
+				q_title=#{param.q_title}, 
+				q_content=#{param.q_content},
+				u_id=#{param.u_id},
+				q_reply=#{param.q_reply}, 
+				q_date=#{param.q_date} 
+			WHERE q_no=#{param.q_no}
+		</foreach>
+	</update>
+	
+	<delete id="deleteQnaWq" parameterType="Map">
+		DELETE tm_qna WHERE q_no=#{q_no}
+	</delete>
+	
+	<delete id="deleteQnaWqBatch" parameterType="Map">
+		DELETE FROM tm_qna WHERE q_no IN
+		<foreach item="param" collection="delete" open="(" separator="," close=")">
+			#{param.q_no}
+		</foreach>
+	</delete>
+	
+</mapper>

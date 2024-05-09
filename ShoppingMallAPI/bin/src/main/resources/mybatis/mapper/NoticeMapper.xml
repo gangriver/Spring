@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="shop.park.repository.NoticeMapper">
+	
+	<resultMap type="Notice" id="noticeResultMap">
+		<result property="n_no" column="N_NO" />
+		<result property="n_category" column="N_CATEGORY" />
+		<result property="n_title" column="N_TITLE" />
+		<result property="n_content" column="N_CONTENT" />
+		<result property="a_id" column="A_ID" />
+		<result property="n_date" column="N_DATE" />
+		<result property="n_hits" column="N_HITS" />
+	</resultMap>
+		
+	<select id="selectAllNotice" resultMap="noticeResultMap">
+		SELECT * FROM tm_notice ORDER BY n_no DESC
+	</select>
+	
+	<select id="selectByNoticeNo" parameterType="long" resultMap="noticeResultMap">
+		SELECT * FROM tm_notice WHERE n_no=#{n_no}
+	</select>
+	
+	<select id="selectByNoticeCategory" parameterType="String" resultMap="noticeResultMap">
+		SELECT * FROM tm_notice WHERE n_category=#{n_category}
+	</select>
+	
+	<select id="searchByNoticeTitle" parameterType="String" resultMap="noticeResultMap">
+		SELECT * FROM tm_notice WHERE n_title LIKE '%'||#{n_title}||'%'
+	</select>
+	
+	<update id="updateNoticeHits" parameterType="long">
+		UPDATE tm_notice SET n_hits=#{n_hits} WHERE n_no=#{n_no}
+	</update>
+	
+	
+	<!-- 관리자페이지용  -->
+	<insert id="insertNotice" parameterType="Notice">
+		INSERT INTO tm_notice(n_no, n_category, n_title, n_content, a_id, n_date, n_hits)
+		VALUES(TM_NOTICE_SEQ.NEXTVAL, #{n_category}, #{n_title}, #{n_content}, #{a_id}, default, 0)
+	</insert> 
+	
+	<update id="updateNotice" parameterType="Notice">
+		UPDATE tm_notice SET n_category=#{n_category}, n_title=#{n_title}, a_id=#{a_id}, n_content=#{n_content}, n_date=#{n_date} 
+		WHERE n_no=#{n_no}
+	</update>
+	
+	<delete id="deleteNotice" parameterType="long">
+		DELETE FROM tm_notice WHERE n_no=#{n_no}
+	</delete>
+	
+	
+	<!-- 웹스퀘어용  -->
+
+	<insert id="insertNoticeWq" parameterType="Map">
+
+		INSERT INTO tm_notice(
+
+			n_no, n_category, n_title, n_content, a_id, n_date, n_hits)
+
+		VALUES(
+
+			TM_NOTICE_SEQ.NEXTVAL, #{n_category}, #{n_title}, #{n_content}, #{a_id}, default, 0)
+
+	</insert>
+
+	
+
+	<insert id="insertNoticeWqBatch" parameterType="Map">
+
+		INSERT INTO tm_notice(n_no, n_category, n_title, n_content, a_id, n_date, n_hits)
+
+		VALUES
+
+		<foreach item="param" collection="insert" index="idx" open="" separator="," close="">
+
+			(
+
+				#{param.n_no},
+
+				#{param.n_category},
+
+				#{param.n_title},
+
+				#{param.n_content},
+
+				#{param.a_id},
+
+				#{param.n_date},
+
+				#{param.n_hits}
+
+			)
+
+		</foreach>
+
+	</insert>
+
+	
+
+	<update id="updateNoticeWq" parameterType="Map">
+
+		UPDATE tm_notice SET
+
+			n_no=#{n_no},
+
+			n_category=#{n_category},
+
+			n_title=#{n_title},
+
+			n_content=#{n_content},
+
+			a_id=#{a_id},
+
+			n_date=#{n_date},
+
+			n_hits=#{n_hits}
+
+		WHERE n_no=#{n_no}
+
+	</update>
+
+	
+
+	<update id="updateNoticeWqBatch" parameterType="Map">
+
+		<foreach item="param" collection="update" open="" separator=";" close="">
+
+			update tm_notice set
+
+				n_no=#{param.n_no},
+
+				n_category=#{param.n_category},
+
+				n_title=#{param.n_title},
+
+				n_content=#{param.n_content},
+
+				a_id=#{param.a_id},
+
+				n_date=#{param.n_date},
+
+				n_hits=#{param.n_hits},
+
+				n_date=#{param.n_date}
+
+			where n_no=#{param.n_no}
+
+		</foreach>
+
+	</update>
+
+	
+
+	
+
+	<delete id="deleteNoticeWq" parameterType="Map">
+
+		DELETE FROM tm_notice WHERE n_no=#{n_no}
+
+	</delete>
+
+	
+
+	<delete id="deleteNoticeWqBatch" parameterType="Map">
+
+		DELETE FROM tm_notice WHERE n_no IN
+
+		<foreach item="param" collection="delete" open="(" separator="," close=")">
+
+			#{param.n_no}
+
+		</foreach>
+
+	</delete>
+	
+</mapper>

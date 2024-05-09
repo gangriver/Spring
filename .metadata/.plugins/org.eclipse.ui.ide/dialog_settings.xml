@@ -109,6 +109,13 @@
 		<item key="WizardProjectsImportPage.STORE_CLOSE_CREATED_PROJECTS_ID" value="false"/>
 		<item key="WizardProjectsImportPage.STORE_HIDE_CONFLICTING_PROJECTS_ID" value="false"/>
 		<list key="WizardProjectsImportPage.STORE_DIRECTORIES">
+			<item value="C:\java\Spring\LiveCommerce"/>
+			<item value="C:\java\Spring\InputOutputStream"/>
+			<item value="C:\java\Spring\ex06_security2"/>
+			<item value="C:\java\Spring\ex06_security"/>
+			<item value="C:\java\Spring\ex05_upload"/>
+			<item value="C:\java\Spring\ex05"/>
+			<item value="C:\java\Spring\ex04"/>
 			<item value="C:\java\Spring\ex03"/>
 			<item value="C:\java\Spring\ex02_1"/>
 			<item value="C:\java\Spring\ex02"/>
